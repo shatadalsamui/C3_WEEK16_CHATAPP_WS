@@ -1,54 +1,75 @@
-# React + TypeScript + Vite
+# React Chat Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Application Architecture
+The frontend implements a reactive UI that:
+- Maintains WebSocket connection state
+- Manages local message cache
+- Provides real-time UI updates
+- Handles user interactions
 
-Currently, two official plugins are available:
+## Core Components
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Connection Management
+- WebSocket connection lifecycle
+- Automatic reconnection logic
+- Connection status indicators
+- Error handling and recovery
 
-## Expanding the ESLint configuration
+### Chat Interface
+```typescript
+interface Message {
+  id: string;
+  content: string;
+  sender: string;
+  timestamp: Date;
+  status: 'sent' | 'delivered' | 'read';
+}
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+interface Room {
+  id: string;
+  name: string;
+  unreadCount: number;
+  lastMessage?: Message;
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### State Management
+- Message history cache
+- Online user tracking
+- Room selection state
+- UI theme preferences
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Directory Structure
 ```
+chat-app-frontend/
+├── src/
+│   ├── components/    # React components
+│   │   ├── Chat/     # Chat UI components
+│   │   ├── Users/    # Online users list
+│   │   └── Rooms/    # Room selection
+│   ├── hooks/        # Custom hooks
+│   │   └── useChat.js
+│   ├── styles/       # Tailwind CSS
+│   └── App.tsx       # Main application
+```
+
+## Core Features
+1. **WebSocket Integration**
+   - Real-time message updates
+   - Connection status indicators
+   - Automatic reconnection
+
+2. **Chat Interface**
+   - Message history display
+   - Responsive message bubbles
+   - Typing indicators
+
+3. **User Management**
+   - Online user tracking
+   - User presence notifications
+   - Room selection UI
+
+## Tailwind Configuration
+- Dark mode support
+- Responsive breakpoints
+- Custom chat bubble styling
